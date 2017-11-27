@@ -11,6 +11,7 @@ module.exports = function(app) {
     // Grab every document in the CoolNewsFeed collection
     db.CoolNewsFeed
         .find({})
+        .sort({'pubDate':-1})
         .then(function(dbCoolNewsFeed) {
         // If we were able to successfully find Articles, send them back to the client
         res.json(dbCoolNewsFeed);

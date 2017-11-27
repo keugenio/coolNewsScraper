@@ -1,47 +1,56 @@
 
 $( document ).ready(function() {
+  grabArticles();
+  // grabNotes();
 
-  // Grab the articles as a json
-  $.getJSON("/api/articles", function(data) {
-    // For each article
+  function grabArticles(){  
+    // Grab the articles as a json
+    $.getJSON("/api/articles", function(data) {
+      // For each article
 
-    for (var i = 0; i < data.length; i++) {
-      // Display the apropos information on the page
-      $("#allArticlesWrapper").
-      append( "<div class='card p-2 m-1 d-inline-flex' data-id='" + data[i]._id + "' style='width: 20rem;'>" + 
-                "<div class='card-header'>" +
-                  "<ul class='nav nav-tabs card-header-tabs articleTabs'>" +
-                    "<li class='nav-item'>" +
-                      "<a data-toggle='tab' class='nav-link nav-item active'  href='#Article-" + data[i]._id + "'>Article</a>" +
-                    "</li>" +
-                    "<li class='nav-item'>" +
-                      "<a data-toggle='tab' class='nav-link nav-item' href='#comment-" + data[i]._id + "'>Comment</a>" +
-                    "</li>" +
-                  "</ul>" +
-                "</div>" +
+      for (var i = 0; i < data.length; i++) {
+        // Display the apropos information on the page
+        let pubDate = new Date(data[i].pubDate);
 
-                "<div class='card-block mt-4'>" + 
-                      "<div class='tab-content'>" + 
-                          "<div class='tab-pane active' id='Article-" + data[i]._id +"'>" + 
-                            "<img class='card-img-top ' src='" + data[i].img + "'></img>" + 
-                            "<div class='h4 card-title mt-3'>" + data[i].title + "</div>" + 
-                            "<div class='card-text'>" + data[i].description + 
-                              "<a class='card-link' href='/api/articles/" + data[i]._id + "'> More...</a>" + 
+        $("#allArticlesWrapper").
+        append( "<div class='card p-2 m-1 d-inline-flex' data-id='" + data[i]._id + "' style='width: 20rem;'>" + 
+                  "<div class='card-header'>" +
+                    "<ul class='nav nav-tabs card-header-tabs articleTabs'>" +
+                      "<li class='nav-item'>" +
+                        "<a data-toggle='tab' class='nav-link nav-item active'  href='#Article-" + data[i]._id + "'>Article</a>" +
+                      "</li>" +
+                      "<li class='nav-item'>" +
+                        "<a data-toggle='tab' class='nav-link nav-item' href='#comment-" + data[i]._id + "'>Comment</a>" +
+                      "</li>" +                     
+                    "</ul>" +
+                    
+                  "</div>" +
+
+                  "<div class='card-block mt-4'>" + 
+                        "<div class='tab-content'>" + 
+                            "<div class='tab-pane active' id='Article-" + data[i]._id +"'>" + 
+                              "<img class='card-img-top ' src='" + data[i].img + "'></img>" + 
+                              "<div class='h4 card-title mt-3'>" + data[i].title + "</div>" + 
+                              "<div class='card-text'>" + data[i].description + 
+                                "<a class='card-link' href='/api/articles/" + data[i]._id + "'> More...</a>" + 
+                              "</div>" + 
                             "</div>" + 
-                          "</div>" + 
-                          "<div class='tab-pane' id='comment-" + data[i]._id + "'>" + 
-                            "<div class='card-text'>" + data[i].description + "</div>" + 
-                          "</div>" + 
-                      "</div>" +
-                "</div>" + 
+                            "<div class='tab-pane' id='comment-" + data[i]._id + "'>" + 
+                                "<span class='text-center'>" + 
+                                  "<h3> No comments yet </p>" +
+                                  "<button class='btn btn-warning center-block' data-toggle='modal' data-target='editCommentModal'>Add</button>" +
+                                "</span>" +
+                            "</div>" + 
+                            
+                        "</div>" +
+                  "</div>" + 
+                  "<div class='card-footer text-right'><p>published: " + pubDate.toDateString() + "</p></div>" +
 
 
-              "</div>");
-    }
-
-
-  });
-
+                "</div>");
+      }
+    });
+}
 
   // Whenever someone clicks a p tag
   $(document).on("click", "p", function() {

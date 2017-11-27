@@ -1,5 +1,7 @@
 var path = require('path');
 var db = require("../models");
+var axios = require("axios");
+var cheerio = require("cheerio");
 
 module.exports = function(app) {
   // goes to home page when accessing home page of site
@@ -12,14 +14,31 @@ module.exports = function(app) {
         // First, we grab the body of the html with request
         // let url = "http://www.echojs.com/";
         let url = "https://www.boredpanda.com/rss";
-        axios.get(url).then(function(response) {
+        let countOfNewArticles = 0;
+    
+        countOfNewArticles = scrape(url);
+
+        if (countOfNewArticles>0){
+            res.render("index", {successMessage:"Scrape of " + countOfNewArticles + " new articles from Bored Panda."});
+        } else {
+            res.render("index", {errorMessage:"no new articles from Bored Panda available now."});
+        }
+        // url = "https://itotd.com/blog/"; // more stories for later
+
+
+    });
+
+function scrape(url){
+    let countOfNewArticles = 0;
+
+    axios.get(url).then(function(response) {
         // console.log(response.data);
         // Then, we load that into cheerio and save it to $ for a shorthand selector
         var $ = cheerio.load(response.data, {
             ignoreWhitespace: true,
             xmlMode: true
             });
-        let countOfNewArticles = 0;
+
     
         // Now, we grab every h2 within an article tag, and do the following:
         $("item").each(function(i, element) {
@@ -35,7 +54,7 @@ module.exports = function(app) {
             result.img = $(this).children("media\\:thumbnail").attr("url");
             result.description = $(this).children("description").text();
             result.content = $(this).children("content\\:encoded").text(); // the entire feed
-    
+            result.pubDate = new Date($(this).children("pubDate").text());
             // Create a new Article using the `result` object built from scraping
             db.CoolNewsFeed
             .create(result)
@@ -50,15 +69,11 @@ module.exports = function(app) {
             });
     
         });
-    
-        });
-        if (countOfNewArticles>0){
-            res.send(index, {successMessage:"Scrape of " + countOfNewArticles + " new articles from Bored Panda Completed"});
-        } else {
-            res.send(index, {errorMessage:"no new articles from Bored Panda Completed"});
-        }
-        // url = "https://itotd.com/blog/"; // more stories for later
     });
+
+    return countOfNewArticles;
+
+}
 
 };
 

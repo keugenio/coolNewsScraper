@@ -1,11 +1,18 @@
 <!-- *** main content *** -->
-    {{!-- {{#if successMessage}}
-        <h3>{{successMessage}}</h3> --}}
-        <div id="allArticlesWrapper" class="d-flex justify-content-center flex-wrap"></div>
-    {{!-- {{else}}
-        <h3>{{errorMessage}}</h3>
-    {{/if}} --}}
+    <div class="container">
+    <div class="d-flex justify-content-end align-items-center">
 
+
+                {{#if successMessage}}
+                    <h4>{{successMessage}}</h2>
+                {{else}}
+                    <h4>{{errorMessage}}</h2>
+                {{/if}}
+
+            <a class="btn btn-danger h4 ml-4" href="/scrape">Get More News</a>
+    </div>
+    </div>
+    <div id="allArticlesWrapper" class="d-flex justify-content-center flex-wrap"></div>
 
 <script src="/assets/js/app.js"></script>
 
