@@ -2,3 +2,6 @@
 .card-title{
     text-align: center;
 }
+.card-text img, .card-text a, .card-text iframe{
+    display: none;
+}

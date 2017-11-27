@@ -31,9 +31,7 @@ $( document ).ready(function() {
                             "<div class='tab-pane active' id='Article-" + data[i]._id +"'>" + 
                               "<img class='card-img-top ' src='" + data[i].img + "'></img>" + 
                               "<div class='h4 card-title mt-3'>" + data[i].title + "</div>" + 
-                              "<div class='card-text'>" + data[i].description + 
-                                "<a class='card-link' href='/api/articles/" + data[i]._id + "'> More...</a>" + 
-                              "</div>" + 
+                              "<div class='card-text'>" + data[i].description + "</div>" + 
                             "</div>" + 
                             "<div class='tab-pane' id='comment-" + data[i]._id + "'>" + 
                                 "<span class='text-center'>" + 
@@ -44,7 +42,9 @@ $( document ).ready(function() {
                             
                         "</div>" +
                   "</div>" + 
-                  "<div class='card-footer text-right'><p>published: " + pubDate.toDateString() + "</p></div>" +
+                  "<div class='card-footer d-flex justify-content-end'>" + 
+                  "<a class='card-link mr-auto' href='/api/articles/" + data[i]._id + "'> More...</a>" + 
+                  "<p>published: " + pubDate.toDateString() + "</p></div>" +
 
 
                 "</div>");
