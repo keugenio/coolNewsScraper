@@ -2,37 +2,29 @@ var path = require('path');
 var db = require("../models");
 var axios = require("axios");
 var cheerio = require("cheerio");
-let countOfNewArticles = 0;
+
+
 
 module.exports = function(app) {
-  // goes to home page when accessing home page of site
-  app.get("/", function(req, res) {
-    res.render("index");
-  });
-
-      // A GET route for scraping the echojs website
-      app.get("/scrape", function(req, res) {
-        // First, we grab the body of the html with request
-        // let url = "http://www.echojs.com/";
-        let url = "https://www.boredpanda.com/rss";
-
-        scrape(url),countOfNewArticles;
-        console.log("**********" + countOfNewArticles + " new articles");
-        url = "https://mashable.com/culture/rss/";
-        scrape(url,countOfNewArticles);
-        console.log("**********" + countOfNewArticles + " new articles");        
-
-        if (countOfNewArticles>0){
-            res.render("index", {successMessage:"Scrape of " + countOfNewArticles + " new articles from Bored Panda or Mashable."});
-        } else {
-            res.render("index", {errorMessage:"no new articles from Bored Panda or Mashable available now."});
-        }
-        // url = "https://itotd.com/blog/"; // more stories for later
-
-
+    // goes to home page when accessing home page of site
+    app.get("/", function(req, res) {
+        res.render("index");
     });
 
-function scrape(url, countOfNewArticles){
+    // A GET route for scraping the echojs website
+    app.get("/scrape", function(req, res) {
+    // First, we grab the body of the html with request
+    // let url = "http://www.echojs.com/";
+    let url = "https://www.boredpanda.com/rss";
+    scrape(url);
+    url = "https://mashable.com/culture/rss/";
+    scrape(url);
+
+    res.redirect("/");
+    // url = "https://itotd.com/blog/"; // more stories for later
+    });
+
+function scrape(url){
     let count = 0;
 
     axios.get(url).then(function(response) {
@@ -61,7 +53,7 @@ function scrape(url, countOfNewArticles){
             aDescription = aDescription.replace(/h2/g,"p");
             aDescription = aDescription.replace(/<div(.*?)>/g,"");
             aDescription = aDescription.replace(/<\/div/g,"");
-            
+
             let aContent = $(this).children("content\\:encoded").text();
             aContent = aContent.replace(/<a(.*?)<\/div>/g, ""); // remove social links
             aContent = aContent.replace(/ <div(.*?)<\/div>/g,"");
@@ -82,7 +74,7 @@ function scrape(url, countOfNewArticles){
             .create(result)
             .then(function(dbCoolNewsFeed) {
                 // If we were able to successfully scrape and save a Cool News Feed from Bored Panda, send a message to the client
-                countOfNewArticles++;
+                console.log("***count:" + this.count());
             })
             .catch(function(err) {
                 // If an error occurred, send it to the client

@@ -2,5 +2,5 @@
 
 module.exports = {
   CoolNewsFeed: require("./CoolNewsFeed"),
-  Note: require("./Note")
+  Note: require("./Comment")
 };
