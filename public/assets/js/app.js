@@ -13,7 +13,7 @@ $( document ).ready(function() {
         let pubDate = new Date(data[i].pubDate);
 
         $("#allArticlesWrapper").
-        append( "<div class='card p-2 m-1 d-inline-flex' data-id='" + data[i]._id + "' style='width: 20rem;'>" + 
+        append( "<div class='card p-2 m-1 d-flex' data-id='" + data[i]._id + "' style='width: 20rem;'>" + 
                   "<div class='card-header'>" +
                     "<ul class='nav nav-tabs card-header-tabs articleTabs'>" +
                       "<li class='nav-item'>" +
@@ -26,7 +26,7 @@ $( document ).ready(function() {
                     
                   "</div>" +
 
-                  "<div class='card-block mt-4'>" + 
+                  "<div class='card-block h-100 mt-4'>" + 
                         "<div class='tab-content'>" + 
                             "<div class='tab-pane active' id='Article-" + data[i]._id +"'>" + 
                               "<img class='card-img-top ' src='" + data[i].img + "'></img>" + 
@@ -43,17 +43,17 @@ $( document ).ready(function() {
                         "</div>" +
                   "</div>" + 
                   "<div class='card-footer d-flex justify-content-end'>" + 
-                  "<a class='card-link mr-auto' href='/api/articles/" + data[i]._id + "'> More...</a>" + 
+                  // "<a class='card-link mr-auto moreLink' href='/api/articles/" + data[i]._id + "'> More...</a>" + 
+                  "<button type='button' class='btn btn-success mr-auto moreLink' data-toggle='modal' data-target='#articalModal' " +                   
+                  "data-id='" + data[i]._id + "'>More</button>" +                  
                   "<p>published: " + pubDate.toDateString() + "</p></div>" +
-
-
                 "</div>");
       }
     });
 }
 
   // Whenever someone clicks a p tag
-  $(document).on("click", "p", function() {
+  $(document).on("click", ".moreLink", function() {
     // Empty the notes from the note section
     $("#notes").empty();
     // Save the id from the p tag
@@ -68,21 +68,16 @@ $( document ).ready(function() {
       .done(function(data) {
         console.log(data);
         // The title of the article
-        $("#notes").append("<h2>" + data.title + "</h2>");
-        // An input to enter a new title
-        $("#notes").append("<input id='titleinput' name='title' >");
-        // A textarea to add a new note body
-        $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
-        // A button to submit a new note, with the id of the article saved to it
-        $("#notes").append("<button data-id='" + data._id + "' id='savenote'>Save Note</button>");
+        $("#articleTitle").html("<b>" + data.title);        
+        $("#articalContent").html(data.content);
 
-        // If there's a note in the article
-        if (data.note) {
-          // Place the title of the note in the title input
-          $("#titleinput").val(data.note.title);
-          // Place the body of the note in the body textarea
-          $("#bodyinput").val(data.note.body);
-        }
+        // // If there's a note in the article
+        // if (data.note) {
+        //   // Place the title of the note in the title input
+        //   $("#titleinput").val(data.note.title);
+        //   // Place the body of the note in the body textarea
+        //   $("#bodyinput").val(data.note.body);
+        // }
       });
   });
 
