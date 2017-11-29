@@ -26,8 +26,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Use express.static to serve the public folder as a static directory
 app.use(express.static("public"));
 
-// Set Handlebars.
+// Set Handlebars express, Handlebars and Handlebars international.
 var exphbs = require("express-handlebars");
+var Handlebars     = require('handlebars');
+var HandlebarsIntl = require('handlebars-intl');
+HandlebarsIntl.registerWith(Handlebars);
 
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");

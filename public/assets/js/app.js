@@ -1,66 +1,4 @@
-
-$( document ).ready(function() {
-  grabArticles();
-  // grabcomments();
-
-  function grabArticles(){  
-    // Grab the articles as a json
-    $.getJSON("/api/articles", function(data) {
-      // For each article
-
-      for (var i = 0; i < data.length; i++) {
-        // Display the apropos information on the page
-        let pubDate = new Date(data[i].pubDate);
-
-        $("#allArticlesWrapper").
-        append( "<div class='card p-2 m-1 d-flex' data-id='" + data[i]._id + "' style='width: 20rem;'>" + 
-                  "<div class='card-header'>" +
-                    "<ul class='nav nav-tabs card-header-tabs articleTabs'>" +
-                      "<li class='nav-item'>" +
-                        "<a data-toggle='tab' class='nav-link nav-item active'  href='#Article-" + data[i]._id + "'>Article</a>" +
-                      "</li>" +
-                      "<li class='nav-item'>" +
-                        "<a data-toggle='tab' class='nav-link nav-item' href='#comment-" + data[i]._id + "'>Comment</a>" +
-                      "</li>" +                     
-                    "</ul>" +
-                    
-                  "</div>" +
-
-                  "<div class='card-block h-100 mt-4'>" + 
-                        "<div class='tab-content'>" + 
-                            "<div class='tab-pane active' id='Article-" + data[i]._id +"'>" + 
-                              "<img class='card-img-top ' src='" + data[i].img + "'></img>" + 
-                              "<div class='h4 card-title mt-3'>" + data[i].title + "</div>" + 
-                              "<div class='card-text'>" + data[i].description + "</div>" + 
-                            "</div>" + 
-                            "<div class='tab-pane' id='comment-" + data[i]._id + "'>" + 
-                                "<span class='text-center '>" + 
-                                  "<h3> No comments yet </p>" +
-                                  "<button class='btn btn-warning center-block btnEditComment' " + 
-                                  "data-toggle='modal' " + 
-                                  "data-id='" + data[i]._id + "' " +
-                                  "data-target='#editCommentModal'>Add</button>" +
-                                "</span>" +
-                            "</div>" + 
-                            
-                        "</div>" +
-                  "</div>" + 
-                  "<div class='card-footer d-flex justify-content-end'>" + 
-                  // "<a class='card-link mr-auto moreLink' href='/api/articles/" + data[i]._id + "'> More...</a>" + 
-                  "<button type='button' class='btn btn-success mr-auto moreLink' data-toggle='modal' data-target='#articalModal' " +                   
-                  "data-id='" + data[i]._id + "'>More</button>" +                  
-                  "<p>published: " + pubDate.toDateString() + "</p></div>" +
-                "</div>"
-        );
-        if (data[i].comment){
-          $("#comment-" + data[i]._id).html("<span><p>" + data[i].comment.body + "</p></span>");
-        }
-        
-      }
-    });
-}
-
-  // Whenever someone clicks a more link
+  // Whenever someone clicks a more link, show the contents on the content modal
   $(document).on("click", ".moreLink", function() {
     // Empty the comments from the comment section
     $("#comments").empty();
@@ -89,13 +27,14 @@ $( document ).ready(function() {
       });
   });
 
-  // pass the article ID to the comment
+  // Add a comment. Pass the article ID to the comment
   $(document).on("click", ".btnEditComment", function() {
-    $("#commentForm").append("<button class='btn btn-danger' type='submit' data-id='" + $(this).attr("data-id") + "'>Submit</button>");
     $("#editCommentModalTitle").html("Comment for Article: " + $(this).attr("data-id"));
+    $("#commentForm").attr("action", "/api/articles/"+ $(this).attr("data-id"));
+    $("#editCommentBody").val("");
   });
 
-  // When you click the saveComment button
+   // When you click the saveComment button
   $(document).on("click", "#saveComment", function() {
     // Grab the id associated with the article from the submit button
     var thisId = $(this).attr("data-id");
@@ -123,4 +62,4 @@ $( document ).ready(function() {
     $("#titleinput").val("");
     $("#bodyinput").val("");
   });
-});
+
