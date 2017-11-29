@@ -1,0 +1,28 @@
+    <div class="card-header d-inline-flex justify-content-end p-1 w-100">
+        <a class="card-link btnEditComment p-1" 
+            href="#"
+            data-toggle="modal" 
+            data-id="{{this._id}}" 
+            data-target="#editCommentModal">
+                <i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i>
+        </a> 
+    </div>    
+    <div class="card" id="card-{{this._id}}">
+        {{#if this.comment.comment}} 
+            <div class="card" id="card-comment-{{this.comment._id}}">
+                    <div class="card-body">
+                        <div class="card-text">    
+                            <p>{{this.comment.comment}}</p>
+                        </div>       
+                        <button class="btn btn-warning card-link btnEditComment" 
+                            data-toggle="modal" 
+                            data-id="{{this._id}}" 
+                            data-target="#editCommentModal">Edit
+                        </button>
+                        <button class="btn btn-inverse card-link btnDelComment" 
+                            data-id="{{this.comment._id}}">Del
+                        </button>
+                    </div>
+            </div>
+        {{/if}}
+    </div>

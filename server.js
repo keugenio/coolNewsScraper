@@ -45,6 +45,7 @@ mongoose.connect("mongodb://localhost/coolNewsFeeds", {
 
 require("./routes/api-routes.js")(app);
 require("./routes/html-routes.js")(app);
+require("./routes/crud-routes.js")(app);
 
 // Start the server
 app.listen(PORT, function() {

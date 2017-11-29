@@ -34,46 +34,6 @@ module.exports = function(app) {
         // url = "https://itotd.com/blog/"; // more stories for later
     });
 
-    app.delete("/delete/comment", function(req, res) {
-        db.Comment
-        .remove(req.body)
-        .then(function(dbCoolNewsFeed) {
-            console.log("comment deleted");
-            res.send({returnMessage:"success"});
-        })
-        .catch(function(err) {
-            // If an error occurred, send it to the client
-            // res.json(err);
-            console.log(err);
-        });
-    });
-
-    // Route for saving/updating an Article's associated Comment
-    app.post("/add/comment/:id", function(req, res) {
-        // Create a new note and pass the req.body to the entry
-        db.Comment    
-        .create({
-            comment:req.body.comment,
-            // article:req.params.id
-        })
-        .then(function(dbComment) {
-                // If a Note was created successfully, find one CoolNewsFeed with an `_id` equal to `req.params.id`. 
-                // Update the CoolNewsFeed to be associated with the new Comment
-                // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
-                return db.CoolNewsFeed.findOneAndUpdate({ _id: req.params.id }, { comment: dbComment._id }, {new: true});
-            })
-            .then(function(dbCoolNewsFeed) {
-                db.CoolNewsFeed
-                .find({ })
-                .populate("comment") // populate all of the notes associated with it
-                .sort({pubDate:-1})
-                .then(function(dbCoolNewsFeed) {
-                // If we were able to successfully find an Article with the given id, send it back to the client
-                    res.render("crud", {coolNews:dbCoolNewsFeed, successMessage:"your comment was added"});
-            });                
-        });
-    });
-
 };
 
 function scrape(url){

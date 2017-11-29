@@ -38,9 +38,6 @@ module.exports = function(app) {
             res.json(err);
             });
     });
-    
-
-    });
 
     // Route for getting all Comments from the db
     app.get("/api/comments", function(req, res) {
@@ -57,16 +54,3 @@ module.exports = function(app) {
             });
         });    
 };
-
-function getAllNews(req,res){
-    db.CoolNewsFeed
-    .find({})
-    .sort({'pubDate':-1})
-    .then(function(dbCoolNewsFeed) {
-        allNews = dbCoolNewsFeed;
-    // If we were able to successfully find Articles, send them back to the client
-        //return dbCoolNewsFeed;
-        return allNews;
-    })
-   
-}

@@ -17,45 +17,41 @@
         $("#articleTitle").html("<b>" + data.title);        
         $("#articalContent").html(data.content);
 
-        // If there's a comment in the article
-        // if (data.comment) {
-        //   // Place the title of the comment in the title input
-        //   $("#titleinput").val(data.comment.title);
-        //   // Place the body of the comment in the body textarea
-        //   $("#bodyinput").val(data.comment.body);
-        // }
       });
   });
 
   // when any Edit Comment button is clicked, update the modal form with Article's ID
   $(document).on("click", ".btnEditComment", function() {
     $("#editCommentModalTitle").html("Comment for Article: " + $(this).attr("data-id"));
-    $("#commentForm").attr("action", "/add/comment/"+ $(this).attr("data-id"));
+    $("#saveComment").attr("data-id", $(this).attr("data-id"));
     $("#editCommentBody").val("");
   });
 
    // When you click the saveComment button
   $(document).on("click", "#saveComment", function() {
     // Grab the id associated with the article from the submit button
-    var thisId = $(this).attr("data-id");
+    let articleID = $(this).attr("data-id");
 
     // Run a POST request to change the comment, using what's entered in the inputs
     $.ajax({
       method: "POST",
-      url: "/api/articles/" + thisId,
+      url: "/add/comment_to/" + articleID,
       data: {
-        // Value taken from title input
-        title: $("#titleinput").val(),
-        // Value taken from comment textarea
-        body: $("#bodyinput").val()
+        // comment taken from the form's textarea
+        comment: $("#editCommentBody").val()
       }
     })
       // With that done
       .done(function(data) {
-        // Log the response
-        console.log(data);
-        // Empty the comments section
-        $("#comments").empty();
+        // if success update the corresponding Article comment tab with new comment
+        if (data.returnMessage =="success"){
+
+          // copy the tab's html and prepend with new comment
+          $("#card-" + articleID).html("<p> comment added. </p>");
+          
+        } else
+        // else alert error
+          alert("no new comment created");
       });
 
     // Also, remove the values entered in the input and textarea for comment entry
@@ -76,8 +72,7 @@
     })
     .done(function(data) {
       if (data.returnMessage == "success"){
-        alert("#card-body-" + thisId);
-        $("#card-body-" + thisId).remove();
+        $("#card-comment-" + thisId).remove();
       }else
         alert("didn't remove");          
     });
