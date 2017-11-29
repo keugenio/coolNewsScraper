@@ -8,21 +8,73 @@ var cheerio = require("cheerio");
 module.exports = function(app) {
     // goes to home page when accessing home page of site
     app.get("/", function(req, res) {
-        res.render("index");
+        db.CoolNewsFeed
+        .find({})
+        .sort({'pubDate':-1})
+        .populate("comment")
+        .then(function(dbCoolNewsFeed) {
+            res.render("crud", {coolNews:dbCoolNewsFeed});
+            })
+        .catch(function(err) {
+            // If an error occurred, send it to the client
+            res.json(err);
+            });
     });
 
     // A GET route for scraping the echojs website
     app.get("/scrape", function(req, res) {
-    // First, we grab the body of the html with request
-    // let url = "http://www.echojs.com/";
-    let url = "https://www.boredpanda.com/rss";
-    scrape(url);
-    url = "https://mashable.com/culture/rss/";
-    scrape(url);
+        // First, we grab the body of the html with request
+        // let url = "http://www.echojs.com/";
+        let url = "https://www.boredpanda.com/rss";
+        scrape(url);
+        url = "https://mashable.com/culture/rss/";
+        scrape(url);
 
-    res.redirect("/");
-    // url = "https://itotd.com/blog/"; // more stories for later
+        res.redirect("/");
+        // url = "https://itotd.com/blog/"; // more stories for later
     });
+
+    app.delete("/delete/comment", function(req, res) {
+        db.Comment
+        .remove(req.body)
+        .then(function(dbCoolNewsFeed) {
+            console.log("comment deleted");
+            res.send({returnMessage:"success"});
+        })
+        .catch(function(err) {
+            // If an error occurred, send it to the client
+            // res.json(err);
+            console.log(err);
+        });
+    });
+
+    // Route for saving/updating an Article's associated Comment
+    app.post("/add/comment/:id", function(req, res) {
+        // Create a new note and pass the req.body to the entry
+        db.Comment    
+        .create({
+            comment:req.body.comment,
+            // article:req.params.id
+        })
+        .then(function(dbComment) {
+                // If a Note was created successfully, find one CoolNewsFeed with an `_id` equal to `req.params.id`. 
+                // Update the CoolNewsFeed to be associated with the new Comment
+                // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
+                return db.CoolNewsFeed.findOneAndUpdate({ _id: req.params.id }, { comment: dbComment._id }, {new: true});
+            })
+            .then(function(dbCoolNewsFeed) {
+                db.CoolNewsFeed
+                .find({ })
+                .populate("comment") // populate all of the notes associated with it
+                .sort({pubDate:-1})
+                .then(function(dbCoolNewsFeed) {
+                // If we were able to successfully find an Article with the given id, send it back to the client
+                    res.render("crud", {coolNews:dbCoolNewsFeed, successMessage:"your comment was added"});
+            });                
+        });
+    });
+
+};
 
 function scrape(url){
     let count = 0;
@@ -56,10 +108,10 @@ function scrape(url){
 
             let aContent = $(this).children("content\\:encoded").text();
             aContent = aContent.replace(/<a(.*?)<\/div>/g, ""); // remove social links
-            aContent = aContent.replace(/ <div(.*?)<\/div>/g,"");
-            aContent = aContent.replace(/ <\/div>/g,"");
+            aContent = aContent.replace(/<div(.*?)<\/div>/g,""); // remove formating
+            aContent = aContent.replace(/<\/div>/g,""); // clean up the loose divs
             aContent = aContent.replace(/<div(.*?)>/g,"");
-            aContent = aContent.replace(/<\/div/g,"");            
+
             //Add the text and href of every link, and save them as properties of the result object
             result.title = $(this).children("title").text();
     
@@ -86,6 +138,3 @@ function scrape(url){
     });
 
 }
-
-};
-

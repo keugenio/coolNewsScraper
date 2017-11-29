@@ -27,10 +27,10 @@
       });
   });
 
-  // Add a comment. Pass the article ID to the comment
+  // when any Edit Comment button is clicked, update the modal form with Article's ID
   $(document).on("click", ".btnEditComment", function() {
     $("#editCommentModalTitle").html("Comment for Article: " + $(this).attr("data-id"));
-    $("#commentForm").attr("action", "/api/articles/"+ $(this).attr("data-id"));
+    $("#commentForm").attr("action", "/add/comment/"+ $(this).attr("data-id"));
     $("#editCommentBody").val("");
   });
 
@@ -61,5 +61,25 @@
     // Also, remove the values entered in the input and textarea for comment entry
     $("#titleinput").val("");
     $("#bodyinput").val("");
+  });
+
+  $(document).on("click", ".btnDelComment", function() {
+    // Grab the id associated with the article from the submit button
+    var thisId = $(this).attr("data-id");
+    // Run a DELET request to delete the comment then delete the local card
+    $.ajax({
+        method: "DELETE",
+        url: "/delete/comment" ,
+        data: {
+          _id:thisId
+        }
+    })
+    .done(function(data) {
+      if (data.returnMessage == "success"){
+        alert("#card-body-" + thisId);
+        $("#card-body-" + thisId).remove();
+      }else
+        alert("didn't remove");          
+    });
   });
 

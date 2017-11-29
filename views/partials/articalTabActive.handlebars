@@ -13,17 +13,23 @@
                     <p>No comments for this Article</p>
                 {{/if}}
             </div>
-
+        {{#if this.comment.comment}}        
             <button class="btn btn-warning card-link btnEditComment" 
                 data-toggle="modal" 
                 data-id="{{this._id}}" 
-                data-target="#editCommentModal">
-                {{#if this.comment.comment}}
-                    Edit
-                {{else}}
-                    Add
-                {{/if}}
+                data-target="#editCommentModal">Edit
             </button>
+            <button class="btn btn-secondary card-link" 
+                data-id="{{this._id}}" 
+                id="#delCommentModal">Del
+            </button>
+        {{else}}        
+            <button class="btn btn-warning card-link btnEditComment" 
+                data-toggle="modal" 
+                data-id="{{this._id}}" 
+                data-target="#editCommentModal">Add
+            </button>
+        {{/if}}
         </div>
     </div>
 </div>
