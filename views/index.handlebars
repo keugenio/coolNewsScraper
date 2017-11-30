@@ -1,31 +1,14 @@
 <!-- *** main content *** -->
-  
-    <div class="container">
-        <div class="d-flex justify-content-end align-items-center">
-          <a href="/" class="mr-auto">
-            <i class="fa fa-home fa-3x" aria-hidden="true"></i>
-          </a>
 
-            {{#if successMessage}}
-                <h4>{{successMessage}}</h2>
-            {{else}}
-                <h4>{{errorMessage}}</h2>
-            {{/if}}
-            <a class="btn btn-danger h4 ml-4" href="/scrape">Get More News</a>
-        </div>
-    </div>
-
-    <div id="allArticlesWrapper" class="d-flex justify-content-center flex-wrap bg-warning">
+    <div id="allArticlesWrapper" class="d-flex justify-content-center flex-wrap bg-warning container-fluid">
             {{#each coolNews}}
                 <div class="card p-2 m-1 d-flex" data-id="{{this._id}}" style="width: 20rem;"> 
                         <div class="card-header">
                             <ul class="nav nav-tabs card-header-tabs articleTabs">
                                     {{#if this.comment.comment}}
-                                        {{#>commentLinkActive}}
-                                        {{/commentLinkActive}}
+                                        {{#>commentLinkActive}}{{/commentLinkActive}}
                                     {{else}}
-                                        {{#>articalLinkActive}}
-                                        {{/articalLinkActive}}
+                                        {{#>articalLinkActive}}{{/articalLinkActive}}
                                     {{/if}}                   
                             </ul>
                             
@@ -34,17 +17,14 @@
                         <div class="card-block">
                                 <div class="tab-content"> 
                                     {{#if this.comment.comment}}
-                                        {{#>commentTabActive}}
-                                        {{/commentTabActive}}                                        
+                                        {{#>commentTabActive}}{{/commentTabActive}}                                        
                                     {{else}}
-                                        {{#>articalTabActive}}
-                                        {{/articalTabActive}}                                        
+                                        {{#>articalTabActive}}{{/articalTabActive}}                                        
                                     {{/if}}
                                 </div>
                         </div> 
                         <div class="card-footer d-flex justify-content-end"> 
                                 <button type="button" class="btn btn-success mr-auto moreLink" data-toggle="modal" data-target="#articalModal" data-id="{{this._id}}">More</button>
-                                <p>published: {{formatRelative this.pubDate}}</p>
                         </div>
                 </div>
             {{/each}} 
@@ -89,6 +69,5 @@
       </div>
     </div>
   </div>
-
-
+  
 <script src="/assets/js/app.js"></script>

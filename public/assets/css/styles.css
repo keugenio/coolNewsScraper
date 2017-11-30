@@ -2,6 +2,16 @@
 .card-title{
     text-align: center;
 }
-.card-text img, .card-text a, .card-text iframe{
-    display: none;
+
+.jumbotron{
+    background-image: url('https://pagefair.com/wp-content/uploads/2013/09/blog6.jpg');
+    background-size: cover;
+    background-repeat: no-repeat; 
+    background-position-y: -250px;
+}
+.jumbotron, #allArticlesWrapper{
+    background-image: url('https://pagefair.com/wp-content/uploads/2013/09/blog6.jpg');
+    background-attachment: fixed;
+    background-position-y: -250px;
+
 }

@@ -1,26 +1,29 @@
-  // Whenever someone clicks a more link, show the contents on the content modal
-  $(document).on("click", ".moreLink", function() {
-    // Empty the comments from the comment section
-    $("#comments").empty();
-    // Save the id from the p tag
-    var thisId = $(this).attr("data-id");
+$(document).ready(function() {
 
-    // Now make an ajax call for the Article
+  $(".card-body").each(function(){
+
+    $(this).html($(this).text());
+  });
+
+
+
+  // Whenever someone clicks a More Button, show the contents on the Content modal
+  $(document).on("click", ".moreLink", function() {
+    let articleID = $(this).attr("data-id");
+    // Make an ajax call for the Article
     $.ajax({
       method: "GET",
-      url: "/api/articles/" + thisId
+      url: "/api/articles/" + articleID
     })
-      // With that done, add the comment information to the page
+      // With that done, add the information to the modal with the title and content of the article
       .done(function(data) {
-        console.log(data);
-        // The title of the article
         $("#articleTitle").html("<b>" + data.title);        
         $("#articalContent").html(data.content);
 
       });
   });
 
-  // when any Edit Comment button is clicked, update the modal form with Article's ID
+  // when any Edit Comment button is clicked, update the Comment modal form with Article's ID
   $(document).on("click", ".btnEditComment", function() {
     $("#editCommentModalTitle").html("Comment for Article: " + $(this).attr("data-id"));
     $("#saveComment").attr("data-id", $(this).attr("data-id"));
@@ -45,8 +48,8 @@
       .done(function(data) {
         // if success update the corresponding Article comment tab with new comment
 
-    // copy the tab's html and prepend with new comment
-          $("#card-" + articleID).append("" +
+          // copy the tab's html and prepend with new comment
+          $("#card-" + articleID).prepend("" +
             "<div class='card' id='card-comment-" + data.Article.comment + "'>" + 
               "<div class='card-body>'" +               
                 "<div class='card-text'>" +  $("#editCommentBody").val() +"</div>" +
@@ -81,3 +84,4 @@
     });
   });
 
+});

@@ -6,6 +6,9 @@ var cheerio = require("cheerio");
 
 
 module.exports = function(app) {
+    app.get("/test", function(req, res) {
+        res.render("test");
+    });
     // goes to home page when accessing home page of site
     app.get("/", function(req, res) {
         db.CoolNewsFeed
