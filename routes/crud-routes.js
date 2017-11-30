@@ -30,7 +30,7 @@ module.exports = function(app) {
             return db.CoolNewsFeed.findOneAndUpdate({ _id: req.params.articleID }, { comment: dbComment._id }, {new: true}); 
         }) 
         .then(function(dbCoolNewsFeed) { 
-                res.send({Article:dbCoolNewsFeed}); 
+                res.send({coolNews:dbCoolNewsFeed}); 
         });                 
 
     });

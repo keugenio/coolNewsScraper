@@ -13,7 +13,8 @@ module.exports = function(app) {
         .sort({'pubDate':-1})
         .populate("comment")
         .then(function(dbCoolNewsFeed) {
-            res.render("crud", {coolNews:dbCoolNewsFeed});
+            console.log("************here");
+            res.render("index", {coolNews:dbCoolNewsFeed});
             })
         .catch(function(err) {
             // If an error occurred, send it to the client
