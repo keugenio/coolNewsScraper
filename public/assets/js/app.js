@@ -44,14 +44,17 @@
       // With that done
       .done(function(data) {
         // if success update the corresponding Article comment tab with new comment
-        if (data.returnMessage =="success"){
 
-          // copy the tab's html and prepend with new comment
-          $("#card-" + articleID).html("<p> comment added. </p>");
-          
-        } else
-        // else alert error
-          alert("no new comment created");
+    // copy the tab's html and prepend with new comment
+          $("#card-" + articleID).append("" +
+            "<div class='card' id='card-comment-" + data.Article.comment + "'>" + 
+              "<div class='card-body>'" +               
+                "<div class='card-text'>" +  $("#editCommentBody").val() +"</div>" +
+                "<button class='btn btn-secondary card-link btnDelComment' data-id='" + data.Article.comment +"'>Del</button>" +
+              "</div>" + 
+            "</div>"
+          );
+
       });
 
     // Also, remove the values entered in the input and textarea for comment entry
