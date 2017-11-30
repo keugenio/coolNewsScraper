@@ -3,6 +3,7 @@ var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
 
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 // Our scraping tools
 // Axios is a promised-based http library, similar to jQuery's Ajax method
 // It works on the client and on the server
@@ -39,7 +40,7 @@ app.set("view engine", "handlebars");
 // Set mongoose to leverage built in JavaScript ES6 Promises
 // Connect to the Mongo DB
 mongoose.Promise = Promise;
-mongoose.connect("mongodb://localhost/coolNewsFeeds", {
+mongoose.connect(MONGODB_URI, {
   useMongoClient: true
 });
 
