@@ -1,4 +1,5 @@
 $(document).ready(function() {
+  let currentArticleCount = 0;
 
   // handle bars loads each description as text and not html. this work around just takes the text of
   // each title and description element and  
@@ -10,6 +11,18 @@ $(document).ready(function() {
     $(this).html($(this).text());
   });
 
+  $(document).on("click", "#getMoreNews", function() {
+
+      $.ajax({
+        method: "GET",
+        url: "/scrape/"
+      })
+      .done(function(data) {
+        alert(data.message);
+        location.reload();
+      });
+
+  });
   // Whenever someone clicks a More Button, show the contents on the Content modal
   $(document).on("click", ".moreLink", function() {
     let articleID = $(this).attr("data-id");
@@ -65,7 +78,6 @@ $(document).ready(function() {
   $(document).on("click", ".btnDelComment", function() {
     // Grab the id associated with the article from the submit button
     let thisId = $(this).attr("data-id");
-    alert(thisId);
     // Run a DELET request to delete the comment then delete the local card
     $.ajax({
         method: "DELETE",
@@ -80,6 +92,18 @@ $(document).ready(function() {
       }else
         alert("didn't remove");          
     });
+
+
+
   });
+  function articleCount(currentArticleCount){
+    $.ajax({
+      method: "GET",
+      url: "/count/"
+    })
+    .done(function(dbCount){
+      currentArticleCount = parseInt(dbCount.count);
+    });
+  }
 
 });

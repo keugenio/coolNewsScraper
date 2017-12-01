@@ -6,8 +6,12 @@ var cheerio = require("cheerio");
 
 
 module.exports = function(app) {
-    app.get("/test", function(req, res) {
-        res.render("test");
+    app.get("/count", function(req, res) {
+        db.CoolNewsFeed
+        .count()
+        .then(function(dbCount){
+            res.send({count:parseInt(dbCount)})
+        })
     });
     // goes to home page when accessing home page of site
     app.get("/", function(req, res) {
@@ -16,7 +20,6 @@ module.exports = function(app) {
         .sort({'pubDate':-1})
         .populate("comment")
         .then(function(dbCoolNewsFeed) {
-            console.log("************here");
             res.render("index", {coolNews:dbCoolNewsFeed});
             })
         .catch(function(err) {
@@ -33,8 +36,7 @@ module.exports = function(app) {
         scrape(url);
         url = "https://mashable.com/culture/rss/";
         scrape(url);
-
-        res.redirect("/");
+        res.send({message:"scrape done"});
         // url = "https://itotd.com/blog/"; // more stories for later
     });
 
@@ -90,7 +92,6 @@ function scrape(url){
             .create(result)
             .then(function(dbCoolNewsFeed) {
                 // If we were able to successfully scrape and save a Cool News Feed from Bored Panda, send a message to the client
-                console.log("***count:" + this.count());
             })
             .catch(function(err) {
                 // If an error occurred, send it to the client
