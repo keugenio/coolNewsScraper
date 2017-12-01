@@ -1,9 +1,12 @@
 $(document).ready(function() {
 
   // handle bars loads each description as text and not html. this work around just takes the text of
-  // each description element and  
+  // each title and description element and  
   // reloads it as html for each article.
   $(".descriptionElement").each(function(){
+    $(this).html($(this).text());
+  });
+  $(".card-title").each(function(){
     $(this).html($(this).text());
   });
 
