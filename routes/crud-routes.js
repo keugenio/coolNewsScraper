@@ -24,6 +24,7 @@ module.exports = function(app) {
         db.Comment    
         .create({comment:req.body.comment})
         .then(function(dbComment) { 
+            console.log("******  req.params.aID :" + req.params.articleID);
             // If a Note was created successfully, find one CoolNewsFeed with an `_id` equal to `req.params.id`.  
             // Update the CoolNewsFeed to be associated with the new Comment 
             // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query 
