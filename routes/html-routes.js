@@ -6,13 +6,20 @@ var cheerio = require("cheerio");
 
 
 module.exports = function(app) {
-    app.get("/count", function(req, res) {
+    // purge all articles older than today
+    app.get("/purge", function(req, res) {
+        let yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        
+        console.log("yesterday is " + yesterday);
+
         db.CoolNewsFeed
-        .count()
-        .then(function(dbCount){
-            res.send({count:parseInt(dbCount)})
+        .remove({pubDate:{$lte:yesterday}})
+        .then(function(){
+            res.send({message:"all old Articals since yesterday purged!"})
         })
     });
+
     // goes to home page when accessing home page of site
     app.get("/", function(req, res) {
         db.CoolNewsFeed

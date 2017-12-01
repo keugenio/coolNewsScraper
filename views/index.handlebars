@@ -2,7 +2,7 @@
 
     <div id="allArticlesWrapper" class="d-flex justify-content-center flex-wrap bg-warning container-fluid">
             {{#each coolNews}}
-                <div class="card p-2 m-1 d-flex" data-id="{{this._id}}" style="width: 20rem;"> 
+                <div class="card p-2 m-1 d-flex card-article" data-id="{{this._id}}" style="width: 20rem;"> 
                         <div class="card-header">
                             <ul class="nav nav-tabs card-header-tabs articleTabs">
                                     {{#if this.comment.comment}}

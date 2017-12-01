@@ -1,5 +1,10 @@
 $(document).ready(function() {
-  let currentArticleCount = 0;
+  if ($(".card-article").length>sessionStorage.currentArticleCount){
+    alert($(".card-article").length-sessionStorage.currentArticleCount + " New Articles for you to read!");
+  }
+
+    sessionStorage.currentArticleCount = $(".card-article").length;
+  
 
   // handle bars loads each description as text and not html. this work around just takes the text of
   // each title and description element and  
@@ -12,7 +17,6 @@ $(document).ready(function() {
   });
 
   $(document).on("click", "#getMoreNews", function() {
-
       $.ajax({
         method: "GET",
         url: "/scrape/"
@@ -21,8 +25,18 @@ $(document).ready(function() {
         alert(data.message);
         location.reload();
       });
-
   });
+  $(document).on("click", "#purgeOldNews", function() {
+    $.ajax({
+      method: "GET",
+      url: "/purge/"
+    })
+    .done(function(data) {
+      alert(data.message);
+      location.reload();
+    });
+  });
+
   // Whenever someone clicks a More Button, show the contents on the Content modal
   $(document).on("click", ".moreLink", function() {
     let articleID = $(this).attr("data-id");
